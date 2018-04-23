@@ -15,7 +15,7 @@ namespace WindowsFormsApplication1
         public static bool Stop=false;
         public static List<String> Player;
         public static ServerWindow instance;
-     
+        public static String port;
         /// </summary>
         [STAThread]
         
@@ -27,11 +27,43 @@ namespace WindowsFormsApplication1
             Console.WriteLine("1");
             instance = new ServerWindow();
             Console.WriteLine("2");
+            GetPort();
             Auth();//Поток авторизации
             Updater();//Обновляет координаты для всех клиентов
             MovementReciver();//Получает передвижения игроков
             Application.Run(instance);
             
+        }
+
+        static void GetPort()
+        {
+            string ServerAdress = "tcp://127.0.0.1:6000";
+            using (var context = new ZContext())
+            using (var requester = new ZSocket(context, ZSocketType.REQ))
+            {
+                requester.Connect(ServerAdress);
+                requester.Send(new ZFrame("New"));
+                using (ZFrame reply = requester.ReceiveFrame())
+                {
+                    String answer = reply.ReadString();
+                    if (answer != "Error")
+                    {
+                        Console.WriteLine("Accept, new port = "+ answer);
+                        port = answer;
+                        MessageBox.Show("Port for this server - "+ port, "New port!",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information);
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("error");
+                        MessageBox.Show("Error (auth)", "error",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         static void Auth()
@@ -42,7 +74,7 @@ namespace WindowsFormsApplication1
                 using (var context = new ZContext())
                 using (var responder = new ZSocket(context, ZSocketType.REP))
                 {
-                    responder.Bind("tcp://*:5555");
+                    responder.Bind("tcp://*:5"+port+"5");
                     while (!Stop)
                     {
                         Console.WriteLine("Waiting");
@@ -81,7 +113,7 @@ namespace WindowsFormsApplication1
                 using (var context = new ZContext())
                 using (var responder = new ZSocket(context, ZSocketType.REP))
                 {
-                    responder.Bind("tcp://*:5556");
+                    responder.Bind("tcp://*:5" + port + "6");
                     while (!Stop)
                     {
                         using (ZFrame request = responder.ReceiveFrame())
@@ -118,7 +150,7 @@ namespace WindowsFormsApplication1
                 using (var context = new ZContext())
                 using (var publisher = new ZSocket(context, ZSocketType.PUB))
                 {
-                    string address = "tcp://*:5557";
+                    string address = "tcp://*:5" + port + "7";
                     publisher.Bind(address);
                     while (true)
                     {

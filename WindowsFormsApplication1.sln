@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "WindowsFormsAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{F3EBDD12-4C2C-4BBF-8491-C76A8B5CD4EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterServer", "MasterServer\MasterServer.csproj", "{D6AEF61B-A1F2-489D-A996-18E18D53449E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Client|Any CPU = Client|Any CPU
@@ -26,6 +28,12 @@ Global
 		{F3EBDD12-4C2C-4BBF-8491-C76A8B5CD4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3EBDD12-4C2C-4BBF-8491-C76A8B5CD4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3EBDD12-4C2C-4BBF-8491-C76A8B5CD4EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Client|Any CPU.ActiveCfg = Release|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Client|Any CPU.Build.0 = Release|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6AEF61B-A1F2-489D-A996-18E18D53449E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

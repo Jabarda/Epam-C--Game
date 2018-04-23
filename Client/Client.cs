@@ -14,6 +14,7 @@ namespace Client
         public static InputNameWindow inpWindow;
         public static GameplayWindow gameWindow;
         public static String PlayerName;
+        public static String Port;
         /// </summary>
         [STAThread]
         static void Main()
@@ -29,7 +30,8 @@ namespace Client
 
         public static void Auth(string Name)
         {
-            string ServerAdress = "tcp://127.0.0.1:5555";
+            GetServerPort();
+            string ServerAdress = "tcp://127.0.0.1:5"+ Port +"5";
             using (var context = new ZContext())
             using (var requester = new ZSocket(context, ZSocketType.REQ))
             {
@@ -54,9 +56,40 @@ namespace Client
             }
         }
 
+        public static void GetServerPort()
+        {
+            string ServerAdress = "tcp://127.0.0.1:5000";
+            using (var context = new ZContext())
+            using (var requester = new ZSocket(context, ZSocketType.REQ))
+            {
+                requester.Connect(ServerAdress);
+                requester.Send(new ZFrame("New"));
+                using (ZFrame reply = requester.ReceiveFrame())
+                {
+                    String Answer = reply.ReadString();
+                    if (Answer != "Error")
+                    {
+                        Console.WriteLine("Accept");
+                        Port = Answer;
+                        MessageBox.Show("Connecting to "+Port+"...", "Connecting...",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        Console.WriteLine("error");
+                        MessageBox.Show("Error (Get New Port)", "error",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+
         public static void Move(string Direction)
         {
-            string ServerAdress = "tcp://127.0.0.1:5556";
+            string ServerAdress = "tcp://127.0.0.1:5" + Port + "6";
             using (var context = new ZContext())
             using (var requester = new ZSocket(context, ZSocketType.REQ))
             {
@@ -86,7 +119,7 @@ namespace Client
                 using (var context = new ZContext())
                 using (var subscriber = new ZSocket(context, ZSocketType.SUB))
                 {
-                    string connect_to = "tcp://127.0.0.1:5557";
+                    string connect_to = "tcp://127.0.0.1:5" + Port + "7";
                     subscriber.Connect(connect_to);
                     subscriber.SubscribeAll();
                     while (true)
